@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import ImageTk, Image
 import get_data
+import get_local_data
 from io import BytesIO
 from bs4 import BeautifulSoup
 import requests
@@ -11,6 +12,8 @@ from PIL import ImageTk as itk
 #put into the searchbar
 
 def main():
+    local = False
+
     window = Tk()
     window.title("Minecraft Recipes")
     window.geometry('800x800')
@@ -40,15 +43,21 @@ def main():
     # Input
     item = Entry(window)
     item.grid(row = 1, column = 1, pady = 2)
-    #item.pack()
-    #inputtxt = Text(window, height = 800, width = 200, bg = "navy")
-    #Output = Text(window, height = 800, width = 200, bg = "gold")
-    #Display = Button(window, height = 800, width = 200, text = "Show Recipe!",
-    #command = lambda:Take_input())
+
+    if local:
+        #Initial Crafting Table
+        img = PhotoImage(file = './assets/recipes/crafting-table-crafting.png')
+        output = Label(height = 112, width = 204, image = img)
+        output.grid(row = 3, column = 1, pady = 2)
+
     #Search Button
-    b1 = Button(window, text = "Search", command = lambda: getRecipes(item.get()))
-    #b1.pack()
-    b1.grid(row = 2, column = 1, pady = 2)
+    if local:
+        b1 = Button(window, text = "Search", command = lambda: getLocalRecipes(item.get(), output)) 
+        b1.grid(row = 2, column = 1, pady = 2)
+    else :
+        b1 = Button(window, text = "Search", command = lambda: getRecipes(item.get()))
+        b1.grid(row = 2, column = 1, pady = 2)
+
     window.mainloop()
 
 #The function named getRecipie
@@ -70,10 +79,14 @@ def getRecipes(item):
 
         output = Label(image = image1)
         output.photo = image1
-        output.grid(row = i  + 3 - y%3, column = y % 3, pady = 2)
+        output.grid(row = i  + 4 - y%3, column = y % 3, pady = 2)
         y+=1
     
-    
+def getLocalRecipes(item, output):
+    outputfilename = get_local_data.main(str(item))
+    img2 = itk.PhotoImage(Image.open(outputfilename))
+    output.configure(image = img2)
+    output.image = img2
 
 # Runs main function when file is run
 if __name__ == '__main__':
