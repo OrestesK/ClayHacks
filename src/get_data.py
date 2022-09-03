@@ -19,7 +19,7 @@ def main(item_name):
         reformated = str(x)
         if check(parameters, reformated):
             urls.append( 'https://' + reformated[reformated.find("src=") + 7 : reformated.find("style=") - 2])
-     
+    urls = list(set(urls))
     return urls
 
 def check(parameters, name):

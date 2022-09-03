@@ -15,6 +15,7 @@ def main():
     local = False
 
     window = Tk()
+    window.attributes('-type', 'dialog')
     window.title("Minecraft Recipes")
     window.geometry('800x800')
     canvas = Canvas(window, height = 300, width = 300)
